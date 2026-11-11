@@ -1,0 +1,245 @@
+<!DOCTYPE html>
+<html lang="en"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Vyom</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,600&family=Hind:wght@400;500;600&family=Noto+Sans+Gurmukhi:wght@400;600&display=swap" rel="stylesheet">
+<style>
+:root{--rust:#B65E43;--blue:#71899A;--sage:#A6AD91;--linen:#F1EDE3;--paper:#FAF7F0;--ink:#5a4d46;--mute:#8a7f76;--line:#e2dccd;--rustp:#EBC9BC;--bluep:#CBD8E0;--sagep:#DCE0CF;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+:root:not([data-theme=light]){color-scheme:light}
+
+*,*:before,*:after{box-sizing:inherit}html{scroll-padding-top:env(safe-area-inset-top,0px)}
+body{margin:0;background:var(--sage);color:var(--ink);font:400 16px/1.6 Hind,"Noto Sans Gurmukhi",sans-serif}
+h1,h2,h3{font-family:Fraunces,"Hind","Noto Sans Gurmukhi",serif;font-weight:600;line-height:1.15;margin:0 0 .5em;letter-spacing:-.01em}
+h1{font-size:clamp(2.2rem,6vw,4.2rem)}h2{font-size:clamp(1.5rem,3.5vw,2.2rem)}h3{font-size:1.15rem}
+p{margin:0 0 1em}.mute{color:var(--mute)}
+header{display:flex;justify-content:space-between;align-items:center;gap:12px;padding:16px clamp(16px,4vw,48px);border-bottom:1px solid var(--line);background:var(--paper);position:sticky;top:env(safe-area-inset-top,0px);z-index:5}
+.logo{font:600 1.7rem Fraunces,serif;color:var(--rust);display:flex;gap:8px;align-items:center}
+.logo svg{width:28px;height:28px}
+.tools{display:flex;gap:8px;align-items:center}
+select,input,button{font:inherit;color:inherit}
+select,input{background:var(--paper);border:1px solid var(--line);border-radius:6px;padding:10px 12px;width:100%}
+.tools select{width:auto;padding:7px 10px}
+button{cursor:pointer}
+.btn{background:#E6B3A0;color:#5a3a2e;border:0;border-radius:999px;padding:12px 26px;font-weight:600;transition:transform .2s,background .2s}
+.btn:hover{background:#dca38d;transform:translateY(-2px)}
+.ghost{background:none;border:1px solid var(--line);border-radius:999px;padding:7px 16px}
+:focus-visible{outline:3px solid var(--blue);outline-offset:2px}
+[hidden]{display:none!important}.view{display:none;min-height:80vh}.view.on{display:block}
+.wrap{max-width:1180px;margin:0 auto;padding:clamp(20px,4vw,48px)}
+/* gate */
+.gate{display:grid;grid-template-columns:1.1fr 1fr 1fr;gap:0;min-height:calc(100vh - 70px)}
+.gate .intro{padding:clamp(24px,5vw,64px);display:flex;flex-direction:column;justify-content:center;animation:rise .9s both}
+.role{border:0;text-align:left;padding:clamp(24px,4vw,48px);display:flex;flex-direction:column;justify-content:flex-end;gap:10px;position:relative;overflow:hidden;min-height:320px;color:var(--ink);transition:flex .3s}
+.role.v{background:var(--rustp)}.role.e{background:var(--bluep)}.role svg{filter:saturate(.55) brightness(1.3)}
+.role svg{position:absolute;top:0;left:0;width:100%;height:60%;opacity:.95}
+.role h2{margin:0;position:relative;font-size:2rem}.role span{position:relative;opacity:.95}
+.role:hover svg{transform:scale(1.04)}.role svg{transition:transform .6s}
+@keyframes rise{from{opacity:0;transform:translateY(18px)}to{opacity:1;transform:none}}
+@media(prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
+/* auth */
+.split{display:grid;grid-template-columns:1fr 1fr;gap:clamp(24px,5vw,64px);align-items:start}
+.card{background:var(--paper);border:1px solid var(--line);border-radius:14px;padding:clamp(18px,3vw,32px)}
+.fld{margin-bottom:14px}.fld label{display:block;font-weight:600;margin-bottom:4px;font-size:.92rem}
+.row{display:flex;gap:8px}.row .btn{white-space:nowrap;padding:10px 16px}
+.chips{display:flex;flex-wrap:wrap;gap:8px}
+.chip{border:1px solid var(--line);background:var(--paper);border-radius:999px;padding:6px 14px;font-size:.9rem}
+.chip.on{background:var(--sage);border-color:var(--sage);color:#2f2b22}
+.hint{font-size:.85rem;color:var(--mute)}
+.price{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin:12px 0 18px}
+.price div{border-left:4px solid var(--blue);background:var(--paper);padding:12px 14px;border-radius:0 10px 10px 0}
+.price.off div{border-color:var(--rust)}
+.price b{display:block;font:600 1.5rem Fraunces,serif}
+.custom{background:var(--sagep);color:var(--ink);border-radius:14px;padding:18px 20px}
+/* dashboards */
+.dh{background:var(--paper);border-bottom:1px solid var(--line)}
+.grid{display:grid;grid-template-columns:repeat(12,1fr);gap:18px}
+.c4{grid-column:span 4}.c6{grid-column:span 6}.c8{grid-column:span 8}.c12{grid-column:span 12}
+.bar{height:10px;border-radius:9px;background:var(--line);overflow:hidden}.bar i{display:block;height:100%;background:var(--rust);border-radius:9px;transform-origin:left;animation:grow 1.2s .3s both}
+.bar.b i{background:var(--blue)}.bar.s i{background:var(--sage)}
+@keyframes grow{from{transform:scaleX(0)}}
+.big{font:600 2.4rem Fraunces,serif;color:var(--rust)}
+.li{display:flex;justify-content:space-between;gap:10px;padding:10px 0;border-bottom:1px dashed var(--line)}.li:last-child{border:0}
+.tag{background:var(--sage);color:#2f2b22;border-radius:999px;padding:2px 10px;font-size:.8rem;white-space:nowrap}
+.seg{display:inline-flex;border:1px solid var(--line);border-radius:999px;overflow:hidden}
+.seg button{background:none;border:0;padding:8px 18px}.seg .on{background:var(--bluep);color:var(--ink)}
+.ai{background:var(--bluep);color:var(--ink);border-radius:14px;padding:20px}.ai input{margin-top:8px;color:var(--ink)}
+.spark{display:flex;align-items:end;gap:6px;height:80px}.spark i{flex:1;background:var(--sage);border-radius:4px 4px 0 0;animation:rise .8s both}
+.sw{position:relative;width:46px;height:26px;display:inline-block;vertical-align:middle}.sw input{opacity:0;width:100%;height:100%;position:absolute;cursor:pointer;z-index:1}
+.sw i{position:absolute;inset:0;background:var(--line);border-radius:30px;transition:.2s}.sw i:after{content:"";position:absolute;top:3px;left:3px;width:20px;height:20px;border-radius:50%;background:#fff;transition:.2s}
+.sw input:checked+i{background:var(--sage)}.sw input:checked+i:after{left:23px}
+@media(max-width:860px){.gate,.split{grid-template-columns:1fr}.c4,.c6,.c8{grid-column:span 12}.price{grid-template-columns:1fr}}
+#chatBtn{position:fixed;right:16px;bottom:calc(16px + env(safe-area-inset-bottom,0px));z-index:20;background:var(--sagep);border:1px solid var(--sage);border-radius:999px;padding:12px 20px;font-weight:600;box-shadow:0 6px 20px #a6ad9160}
+#chatPanel{position:fixed;right:16px;bottom:calc(76px + env(safe-area-inset-bottom,0px));width:min(380px,calc(100vw - 32px));height:min(520px,70vh);z-index:20;background:var(--paper);border:1px solid var(--line);border-radius:16px;display:flex;flex-direction:column;overflow:hidden;box-shadow:0 12px 36px #71899a30;animation:rise .3s both}
+.ch{display:flex;justify-content:space-between;align-items:center;padding:12px 16px;background:var(--bluep);font-weight:600}
+#cmsg{flex:1;overflow:auto;padding:12px;display:flex;flex-direction:column;gap:8px}
+.m{padding:8px 12px;border-radius:12px;max-width:88%;white-space:pre-wrap}.m.u{align-self:flex-end;background:var(--rustp)}.m.a{background:var(--sagep)}
+.cs{display:flex;flex-wrap:wrap;gap:6px;padding:0 12px 8px}.cf{display:flex;gap:8px;padding:10px;border-top:1px solid var(--line)}.cf .btn{padding:8px 16px}
+</style></head><body>
+<header><div class="logo"><svg viewBox="0 0 32 32"><path d="M3 27V13l13-9 13 9v14H3z" fill="none" stroke="#B65E43" stroke-width="2.5"/><path d="M11 27V17a5 5 0 0 1 10 0v10" fill="#A6AD91"/></svg>Vyom</div>
+<div class="tools"><button class="ghost" id="sw" hidden data-i="switch"></button>
+<select id="lang" aria-label="Language"><option value="0">English</option><option value="1">हिन्दी</option><option value="2">ਪੰਜਾਬੀ</option><option value="3">हरियाणवी</option></select></div></header>
+
+<main>
+<section class="view on" id="gate"><div class="gate">
+<div class="intro"><h1 data-i="gT"></h1><p class="mute" style="max-width:34ch" data-i="gS"></p></div>
+<button class="role v" data-go="vendor"><svg viewBox="0 0 300 200" preserveAspectRatio="xMidYMid slice"><rect width="300" height="200" fill="#c97a5f"/><path d="M0 60h300v22c-12 14-24 14-37.5 0-12.500 14-25 14-37.500 0-12.500 14-25 14-37.500 0-12.500 14-25 14-37.500 0-12.500 14-25 14-37.500 0-12.500 14-25 14-37.500 0-12.500 14-25 14-37.500 0z" fill="#F1EDE3"/><path d="M0 60h300v10H0z" fill="#A6AD91"/><rect x="40" y="110" width="220" height="90" fill="#9d4d35"/><rect x="60" y="125" width="50" height="75" fill="#F1EDE3"/><circle cx="215" cy="150" r="22" fill="#A6AD91"/><path d="M215 128v44M193 150h44" stroke="#9d4d35" stroke-width="2"/></svg><h2 data-i="vendor"></h2><span data-i="vSub"></span></button>
+<button class="role e" data-go="engineer"><svg viewBox="0 0 300 200" preserveAspectRatio="xMidYMid slice"><rect width="300" height="200" fill="#82979f"/><path d="M0 200V120l40-30 40 30 40-50 50 50 40-35 50 35 40-20v100z" fill="#A6AD91"/><rect x="95" y="60" width="110" height="72" rx="6" fill="#F1EDE3"/><path d="M120 85l-16 11 16 11M180 85l16 11-16 11M158 80l-14 32" stroke="#71899A" stroke-width="5" fill="none" stroke-linecap="round"/><rect x="75" y="136" width="150" height="9" rx="4" fill="#F1EDE3"/></svg><h2 data-i="engineer"></h2><span data-i="eSub"></span></button>
+</div></section>
+
+<section class="view" id="vendor"><div class="wrap split">
+<div><h1 data-i="vH"></h1><p class="mute" data-i="vP"></p></div>
+<div class="card" id="vForm"></div></div></section>
+
+<section class="view" id="engineer"><div class="wrap split">
+<div><h1 data-i="eH"></h1><p class="mute" data-i="eP"></p>
+<div class="card"><h3 data-i="skm"></h3><p class="mute" style="margin:0" data-i="skmP"></p></div></div>
+<div class="card" id="eForm"></div></div></section>
+
+<section class="view" id="vDash">
+<div class="dh"><div class="wrap grid" style="align-items:center"><div class="c8"><h1 style="margin:0" data-i="vW"></h1></div><div class="c4"><b data-i="comp"></b> 72%<div class="bar"><i style="width:72%"></i></div></div></div></div>
+<div class="wrap grid">
+<div class="c4 card" style="background:var(--rustp)"><h2 data-i="hire"></h2><div class="seg" id="hm" style="border-color:#fff8"><button class="on" data-i="online"></button><button data-i="offline"></button></div><p class="hint" style="margin:12px 0" data-i="hireP"></p><button class="btn" style="background:var(--paper)" data-i="hireB"></button></div>
+<div class="c8 card"><h3 data-i="act"></h3>
+<div class="li"><span>Instagram ordering page · Rohit S. (IIT Delhi)</span><span class="tag">Online</span></div><div class="bar b"><i style="width:65%"></i></div>
+<div class="li"><span>Billing & stock app · Ananya K. (DTU)</span><span class="tag">Offline</span></div><div class="bar"><i style="width:30%"></i></div></div>
+<div class="c12 card"><h2 data-i="plans"></h2><h3 data-i="onl"></h3><div class="price"><div>Basic<b>₹499</b></div><div>Standard<b>₹899</b></div><div>Premium<b>₹1,999</b></div></div><h3 data-i="ofl"></h3><div class="price off"><div>Basic<b>₹999</b></div><div>Standard<b>₹1,599</b></div><div>Premium<b>₹2,999</b></div></div><div class="custom"><h3 data-i="cust"></h3><p style="margin:0" data-i="custP"></p></div></div>
+<div class="c6 card"><h3 data-i="store"></h3><div class="spark"><i style="height:30%"></i><i style="height:45%"></i><i style="height:40%"></i><i style="height:62%"></i><i style="height:55%"></i><i style="height:80%"></i><i style="height:92%"></i></div><p class="mute" style="margin:8px 0 0">1,284 visits · 96 orders · ₹38,450</p></div>
+<div class="c6 card"><h3 data-i="rec"></h3><div class="li"><span>Google Maps listing + WhatsApp catalogue</span><span class="tag">₹899</span></div><div class="li"><span data-i="maint"></span><span class="tag">₹299/mo</span></div><div class="li"><span>Festival offer banners</span><span class="tag">₹499</span></div></div>
+<div class="c6 card"><h3 data-i="pay"></h3><div class="li"><span>Online Standard</span><b>₹899</b></div><div class="li"><span>Offline Basic</span><b>₹999</b></div><div class="li"><span>🔔 Rohit uploaded a new design</span><span class="mute">2h</span></div></div>
+<div class="c6 ai"><h3 data-i="ai"></h3><p data-i="aiP"></p><input id="aiq" placeholder="…" aria-label="Ask"><p id="aia" style="margin:10px 0 0"></p></div>
+</div></section>
+
+<section class="view" id="eDash">
+<div class="dh"><div class="wrap grid" style="align-items:center"><div class="c6"><h1 style="margin:0" data-i="eW"></h1></div><div class="c3 c4"><b data-i="comp"></b> 64%<div class="bar b"><i style="width:64%"></i></div></div><div class="c4"><b data-i="avail"></b> <label class="sw"><input type="checkbox" checked aria-label="Availability"><i></i></label></div></div></div>
+<div class="wrap grid">
+<div class="c6 card"><h3 data-i="recP"></h3><div class="li"><span>Sweet shop billing app (Ludhiana)</span><span class="tag">94%</span></div><div class="li"><span>Kirana WhatsApp catalogue (Rohtak)</span><span class="tag">88%</span></div><div class="li"><span>Salon booking page (Jaipur)</span><span class="tag">81%</span></div></div>
+<div class="c6 card"><h3 data-i="req"></h3><div class="li"><span>Garment store website · Online</span><span><button class="btn" style="padding:4px 14px">✓</button></span></div><div class="li"><span>CCTV & Wi-Fi setup · Offline</span><span><button class="ghost">✓</button></span></div></div>
+<div class="c6 card"><h3 data-i="actE"></h3><div class="li"><span>Dairy inventory app</span><span class="mute">14 Nov</span></div><div class="bar b"><i style="width:55%"></i></div><div class="li"><span>Café menu QR</span><span class="mute">20 Nov</span></div><div class="bar"><i style="width:20%"></i></div></div>
+<div class="c3 c6 card"><h3 data-i="earn"></h3><div class="big">₹14,800</div><div class="bar s"><i style="width:74%"></i></div><p class="hint" style="margin-top:8px">74% of ₹20,000</p></div>
+<div class="c12 card"><h3 data-i="rev"></h3><p style="margin:0">★★★★★ “Delivered before Diwali and explained everything patiently.” — Meena Sweets, Ludhiana</p></div>
+</div></section>
+</main>
+<button id="chatBtn" hidden>💬 <span data-t="chatT"></span></button>
+<div id="chatPanel" hidden><div class="ch"><span data-t="chatT"></span><button class="ghost" id="cclose" aria-label="Close">✕</button></div><div id="cmsg" aria-live="polite"></div><div class="cs" id="csg"></div><form class="cf" id="cf"><input id="cin" aria-label="Message" autocomplete="off"><button class="btn" data-t="send"></button></form></div>
+
+<script>
+const D={
+gT:["Small businesses, built up by young engineers.","छोटे कारोबार, युवा इंजीनियरों के साथ आगे।","ਛੋਟੇ ਕਾਰੋਬਾਰ, ਨੌਜਵਾਨ ਇੰਜੀਨੀਅਰਾਂ ਨਾਲ ਅੱਗੇ।","छोटे धंधे, नौजवान इंजीनियरां के साथ आगे।"],
+gS:["Vyom connects local shopkeepers with skilled engineering students. Who are you?","व्योम स्थानीय दुकानदारों को हुनरमंद इंजीनियरिंग छात्रों से जोड़ता है। आप कौन हैं?","ਵਿਓਮ ਸਥਾਨਕ ਦੁਕਾਨਦਾਰਾਂ ਨੂੰ ਹੁਨਰਮੰਦ ਇੰਜੀਨੀਅਰਿੰਗ ਵਿਦਿਆਰਥੀਆਂ ਨਾਲ ਜੋੜਦਾ ਹੈ। ਤੁਸੀਂ ਕੌਣ ਹੋ?","व्योम लोकल दुकानदारां नै हुनरमंद इंजीनियरिंग छात्रां तै जोड़ै सै। तू कौन सै?"],
+vendor:["I'm a Vendor","मैं विक्रेता हूँ","ਮੈਂ ਵਿਕਰੇਤਾ ਹਾਂ","मैं दुकानदार सूं"],
+engineer:["I'm an Engineer","मैं इंजीनियर हूँ","ਮੈਂ ਇੰਜੀਨੀਅਰ ਹਾਂ","मैं इंजीनियर सूं"],
+vSub:["Hire talent for your shop","अपनी दुकान के लिए हुनर चुनें","ਆਪਣੀ ਦੁਕਾਨ ਲਈ ਹੁਨਰ ਚੁਣੋ","अपनी दुकान खात्तर हुनर ले"],
+eSub:["Find real projects, get paid","असली प्रोजेक्ट पाएँ, कमाएँ","ਅਸਲੀ ਪ੍ਰੋਜੈਕਟ ਲੱਭੋ, ਕਮਾਓ","असली प्रोजेक्ट पा, कमा"],
+switch:["Change role","भूमिका बदलें","ਭੂਮਿਕਾ ਬਦਲੋ","भूमिका बदल"],
+vH:["Open your shop to the digital world.","अपनी दुकान को डिजिटल दुनिया से जोड़ें।","ਆਪਣੀ ਦੁਕਾਨ ਨੂੰ ਡਿਜੀਟਲ ਦੁਨੀਆ ਨਾਲ ਜੋੜੋ।","अपनी दुकान नै डिजिटल दुनिया तै जोड़ ले।"],
+vP:["Fill in your shop details to open your dashboard.","अपनी दुकान की जानकारी भरें और डैशबोर्ड खोलें।","ਆਪਣੀ ਦੁਕਾਨ ਦੀ ਜਾਣਕਾਰੀ ਭਰੋ ਅਤੇ ਡੈਸ਼ਬੋਰਡ ਖੋਲ੍ਹੋ।","अपनी दुकान की जानकारी भर अर डैशबोर्ड खोल।"],
+plans:["Hiring plans and pricing","हायरिंग प्लान और कीमतें","ਹਾਇਰਿੰਗ ਪਲਾਨ ਅਤੇ ਕੀਮਤਾਂ","हायरिंग प्लान अर दाम"],
+eH:["Turn your skills into local work.","अपने हुनर को स्थानीय काम में बदलें।","ਆਪਣੇ ਹੁਨਰ ਨੂੰ ਸਥਾਨਕ ਕੰਮ ਵਿੱਚ ਬਦਲੋ।","अपणे हुनर नै लोकल काम म्हं बदल दे।"],
+eP:["Create your engineer profile and get matched to shops that need exactly what you know.","इंजीनियर प्रोफ़ाइल बनाएँ और अपने हुनर के हिसाब से दुकानों से मिलें।","ਇੰਜੀਨੀਅਰ ਪ੍ਰੋਫ਼ਾਈਲ ਬਣਾਓ ਅਤੇ ਆਪਣੇ ਹੁਨਰ ਮੁਤਾਬਕ ਦੁਕਾਨਾਂ ਨਾਲ ਮਿਲੋ।","इंजीनियर प्रोफाइल बणा अर अपणे हुनर मुताबिक दुकानां तै मिल।"],
+skm:["Skill-based matching","हुनर आधारित मिलान","ਹੁਨਰ ਆਧਾਰਿਤ ਮਿਲਾਨ","हुनर आळा मिलान"],
+skmP:["Your skills, experience and work mode decide which projects you see first.","आपके हुनर, अनुभव और काम के तरीक़े से तय होता है कि पहले कौन से प्रोजेक्ट दिखें।","ਤੁਹਾਡੇ ਹੁਨਰ, ਤਜਰਬੇ ਅਤੇ ਕੰਮ ਦੇ ਢੰਗ ਮੁਤਾਬਕ ਪ੍ਰੋਜੈਕਟ ਦਿਸਦੇ ਹਨ।","थारे हुनर, तजुर्बे अर काम के ढंग तै प्रोजेक्ट दिखैं सैं।"],
+onl:["Online hiring","ऑनलाइन हायरिंग","ਆਨਲਾਈਨ ਹਾਇਰਿੰਗ","ऑनलाइन हायरिंग"],
+ofl:["Offline hiring (at your shop)","ऑफलाइन हायरिंग (आपकी दुकान पर)","ਆਫਲਾਈਨ ਹਾਇਰਿੰਗ (ਤੁਹਾਡੀ ਦੁਕਾਨ 'ਤੇ)","ऑफलाइन हायरिंग (थारी दुकान पै)"],
+cust:["Customised pricing","अपनी ज़रूरत का दाम","ਆਪਣੀ ਲੋੜ ਮੁਤਾਬਕ ਕੀਮਤ","अपणी जरूरत का दाम"],
+custP:["Need something bigger? Describe it and receive a quote made for your business.","कुछ बड़ा चाहिए? बताएँ और अपने कारोबार के लिए अलग कोटेशन पाएँ।","ਕੁਝ ਵੱਡਾ ਚਾਹੀਦਾ ਹੈ? ਦੱਸੋ ਅਤੇ ਆਪਣੇ ਕਾਰੋਬਾਰ ਲਈ ਵੱਖਰਾ ਕੋਟੇਸ਼ਨ ਲਓ।","कुछ बड्डा चाहिए? बता अर अपणे धंधे खात्तर न्यारा कोटेशन ले।"],
+name:["Full name","पूरा नाम","ਪੂਰਾ ਨਾਮ","पूरा नाम"],
+mob:["Mobile number","मोबाइल नंबर","ਮੋਬਾਈਲ ਨੰਬਰ","मोबाइल नंबर"],
+otpL:["OTP","ओटीपी","ਓਟੀਪੀ","ओटीपी"],
+sendO:["Send OTP","ओटीपी भेजें","ਓਟੀਪੀ ਭੇਜੋ","ओटीपी भेज"],
+verO:["Verify","जाँचें","ਜਾਂਚੋ","जांच"],
+otpH:["Demo code: 1234","डेमो कोड: 1234","ਡੈਮੋ ਕੋਡ: 1234","डेमो कोड: 1234"],
+chatT:["Ask Vyom","व्योम से पूछें","ਵਿਓਮ ਨੂੰ ਪੁੱਛੋ","व्योम तै पूछ"],
+chatP:["Hi! Ask me anything: plans, projects, your profile, or any other question.","नमस्ते! कुछ भी पूछें: प्लान, प्रोजेक्ट, प्रोफ़ाइल या कोई और सवाल।","ਸਤ ਸ੍ਰੀ ਅਕਾਲ! ਕੁਝ ਵੀ ਪੁੱਛੋ: ਪਲਾਨ, ਪ੍ਰੋਜੈਕਟ, ਪ੍ਰੋਫ਼ਾਈਲ ਜਾਂ ਕੋਈ ਹੋਰ ਸਵਾਲ।","राम राम! कुछ भी पूछ: प्लान, प्रोजेक्ट, प्रोफाइल या कोई और सवाल।"],
+chatPh:["Type your question…","अपना सवाल लिखें…","ਆਪਣਾ ਸਵਾਲ ਲਿਖੋ…","अपणा सवाल लिख…"],
+send:["Send","भेजें","ਭੇਜੋ","भेज"],
+noai:["The assistant is not available right now. Please try again in a moment.","सहायक अभी उपलब्ध नहीं है। कृपया थोड़ी देर में फिर कोशिश करें।","ਸਹਾਇਕ ਹੁਣੇ ਉਪਲਬਧ ਨਹੀਂ ਹੈ। ਕਿਰਪਾ ਕਰਕੇ ਥੋੜ੍ਹੀ ਦੇਰ ਬਾਅਦ ਕੋਸ਼ਿਸ਼ ਕਰੋ।","सहायक अभी हाजिर कोनी। थोड़ी देर पाछै फेर कोशिश कर।"],
+demo:["See a demo dashboard instead","इसके बजाय डेमो डैशबोर्ड देखें","ਇਸ ਦੀ ਥਾਂ ਡੈਮੋ ਡੈਸ਼ਬੋਰਡ ਵੇਖੋ","इसकी जगह डेमो डैशबोर्ड देख"],
+fill:["Please fill in every required field.","सभी ज़रूरी जानकारी भरें।","ਸਾਰੀ ਲੋੜੀਂਦੀ ਜਾਣਕਾਰੀ ਭਰੋ।","सारी जरूरी जानकारी भर।"],
+okV:["Number verified ✓","नंबर सत्यापित ✓","ਨੰਬਰ ਪੁਸ਼ਟੀ ✓","नंबर पक्का ✓"],
+needV:["Verify your mobile number first.","पहले मोबाइल नंबर सत्यापित करें।","ਪਹਿਲਾਂ ਮੋਬਾਈਲ ਨੰਬਰ ਦੀ ਪੁਸ਼ਟੀ ਕਰੋ।","पैल्लां मोबाइल नंबर पक्का कर।"],
+mail:["Email address","ईमेल पता","ਈਮੇਲ ਪਤਾ","ईमेल पता"],
+pass:["Password","पासवर्ड","ਪਾਸਵਰਡ","पासवर्ड"],
+biz:["Business name","व्यवसाय का नाम","ਕਾਰੋਬਾਰ ਦਾ ਨਾਮ","धंधे का नाम"],
+cat:["Business category","व्यवसाय की श्रेणी","ਕਾਰੋਬਾਰ ਦੀ ਸ਼੍ਰੇਣੀ","धंधे की श्रेणी"],
+loc:["Shop location / address","दुकान का स्थान / पता","ਦੁਕਾਨ ਦੀ ਥਾਂ / ਪਤਾ","दुकान की जगह / पता"],
+col:["College / university","कॉलेज / विश्वविद्यालय","ਕਾਲਜ / ਯੂਨੀਵਰਸਿਟੀ","कॉलेज / यूनिवर्सिटी"],
+brn:["Branch / specialisation","शाखा / विशेषज्ञता","ਸ਼ਾਖਾ / ਵਿਸ਼ੇਸ਼ਤਾ","शाखा / विशेषज्ञता"],
+skl:["Technical skills","तकनीकी कौशल","ਤਕਨੀਕੀ ਹੁਨਰ","तकनीकी हुनर"],
+exp:["Experience level","अनुभव स्तर","ਤਜਰਬੇ ਦਾ ਪੱਧਰ","तजुर्बे का स्तर"],
+pf:["Portfolio / GitHub link","पोर्टफ़ोलियो / GitHub लिंक","ਪੋਰਟਫੋਲੀਓ / GitHub ਲਿੰਕ","पोर्टफोलियो / GitHub लिंक"],
+mode:["Preferred work mode","पसंदीदा काम का तरीक़ा","ਪਸੰਦੀਦਾ ਕੰਮ ਦਾ ਢੰਗ","पसंद का काम का ढंग"],
+online:["Online","ऑनलाइन","ਆਨਲਾਈਨ","ऑनलाइन"],offline:["Offline","ऑफलाइन","ਆਫਲਾਈਨ","ऑफलाइन"],
+create:["Create account and continue","खाता बनाकर आगे बढ़ें","ਖਾਤਾ ਬਣਾ ਕੇ ਅੱਗੇ ਵਧੋ","खाता बणा कै आगे बढ़"],
+vW:["Good morning! Let's grow your business.","सुप्रभात! चलिए आपका कारोबार बढ़ाएँ।","ਸ਼ੁਭ ਸਵੇਰ! ਆਓ ਤੁਹਾਡਾ ਕਾਰੋਬਾਰ ਵਧਾਈਏ।","राम राम! चाल, थारा धंधा बढ़ावां।"],
+eW:["Ready to turn your skills into opportunities?","क्या आप अपने हुनर को मौक़ों में बदलने के लिए तैयार हैं?","ਕੀ ਤੁਸੀਂ ਆਪਣੇ ਹੁਨਰ ਨੂੰ ਮੌਕਿਆਂ ਵਿੱਚ ਬਦਲਣ ਲਈ ਤਿਆਰ ਹੋ?","के तू अपणे हुनर नै मौके म्हं बदलण खात्तर तैयार सै?"],
+comp:["Profile completion","प्रोफ़ाइल पूर्णता","ਪ੍ਰੋਫ਼ਾਈਲ ਪੂਰਨਤਾ","प्रोफाइल पूरी"],
+hire:["Hire an Engineer","इंजीनियर रखें","ਇੰਜੀਨੀਅਰ ਰੱਖੋ","इंजीनियर रख"],
+hireP:["Matched by skill. Online from ₹499, offline from ₹999.","हुनर के आधार पर मिलान। ऑनलाइन ₹499 से, ऑफलाइन ₹999 से।","ਹੁਨਰ ਮੁਤਾਬਕ ਮਿਲਾਨ। ਆਨਲਾਈਨ ₹499 ਤੋਂ, ਆਫਲਾਈਨ ₹999 ਤੋਂ।","हुनर तै मिलान। ऑनलाइन ₹499 तै, ऑफलाइन ₹999 तै।"],
+hireB:["Find an engineer","इंजीनियर खोजें","ਇੰਜੀਨੀਅਰ ਲੱਭੋ","इंजीनियर ढूंढ"],
+act:["Your active projects","आपके सक्रिय प्रोजेक्ट","ਤੁਹਾਡੇ ਸਰਗਰਮ ਪ੍ਰੋਜੈਕਟ","थारे चालू प्रोजेक्ट"],
+store:["Digital store performance","डिजिटल स्टोर प्रदर्शन","ਡਿਜੀਟਲ ਸਟੋਰ ਪ੍ਰਦਰਸ਼ਨ","डिजिटल स्टोर का हाल"],
+rec:["Recommended services","सुझाई गई सेवाएँ","ਸੁਝਾਈਆਂ ਸੇਵਾਵਾਂ","सुझाई सेवा"],
+maint:["Maintenance plan","रखरखाव योजना","ਰੱਖ-ਰਖਾਅ ਯੋਜਨਾ","रखरखाव योजना"],
+pay:["Recent payments and notifications","हाल के भुगतान और सूचनाएँ","ਹਾਲੀਆ ਭੁਗਤਾਨ ਅਤੇ ਸੂਚਨਾਵਾਂ","ताज़ा भुगतान अर सूचना"],
+ai:["Vyom assistant","व्योम सहायक","ਵਿਓਮ ਸਹਾਇਕ","व्योम सहायक"],
+aiP:["Ask what your shop needs, in your own language.","अपनी भाषा में पूछें कि आपकी दुकान को क्या चाहिए।","ਆਪਣੀ ਭਾਸ਼ਾ ਵਿੱਚ ਪੁੱਛੋ ਕਿ ਤੁਹਾਡੀ ਦੁਕਾਨ ਨੂੰ ਕੀ ਚਾਹੀਦਾ ਹੈ।","अपणी भाषा म्हं पूछ अक तेरी दुकान नै के चाहिए।"],
+aiA:["Start with Online Standard (₹899): a catalogue page plus WhatsApp ordering.","ऑनलाइन स्टैंडर्ड (₹899) से शुरू करें: कैटलॉग पेज और व्हाट्सऐप ऑर्डर।","ਆਨਲਾਈਨ ਸਟੈਂਡਰਡ (₹899) ਤੋਂ ਸ਼ੁਰੂ ਕਰੋ: ਕੈਟਾਲਾਗ ਪੇਜ ਅਤੇ ਵਟਸਐਪ ਆਰਡਰ।","ऑनलाइन स्टैंडर्ड (₹899) तै शुरू कर: कैटलॉग पेज अर व्हाट्सऐप ऑर्डर।"],
+avail:["Availability","उपलब्धता","ਉਪਲਬਧਤਾ","उपलब्धता"],
+recP:["Recommended projects","सुझाए गए प्रोजेक्ट","ਸੁਝਾਏ ਪ੍ਰੋਜੈਕਟ","सुझाए प्रोजेक्ट"],
+req:["New project requests","नए प्रोजेक्ट अनुरोध","ਨਵੀਆਂ ਪ੍ਰੋਜੈਕਟ ਬੇਨਤੀਆਂ","नए प्रोजेक्ट की अर्जी"],
+actE:["Active projects and deadlines","सक्रिय प्रोजेक्ट और समय-सीमा","ਸਰਗਰਮ ਪ੍ਰੋਜੈਕਟ ਅਤੇ ਸਮਾਂ-ਸੀਮਾ","चालू प्रोजेक्ट अर आखिरी तारीख"],
+earn:["Monthly earnings","मासिक कमाई","ਮਹੀਨਾਵਾਰ ਕਮਾਈ","महीने की कमाई"],
+rev:["Client reviews","ग्राहक समीक्षाएँ","ਗਾਹਕ ਸਮੀਖਿਆਵਾਂ","ग्राहकां की राय"]};
+const $=s=>document.querySelector(s),$$=s=>[...document.querySelectorAll(s)];
+let lg=0,role=null,verified=false;
+const t=k=>D[k][lg];
+function apply(){$$("[data-i]").forEach(e=>e.textContent=t(e.dataset.i));$$("[data-t]").forEach(e=>e.textContent=t(e.dataset.t));
+document.documentElement.lang=["en","hi","pa","hi"][lg];$("#aiq").placeholder=t("aiP");$("#cin").placeholder=t("chatPh")}
+function show(id){$$(".view").forEach(v=>v.classList.toggle("on",v.id==id));$("#sw").hidden=id=="gate";$("#chatBtn").hidden=id=="gate";if(id=="gate")$("#chatPanel").hidden=true;scrollTo(0,0)}
+const cats=["Kirana / grocery","Sweets & bakery","Clothing & textiles","Salon & beauty","Electronics & repair","Restaurant & dhaba","Other"];
+const exps=["Student (0–1 yr)","1–2 years","2–4 years","4+ years"];
+const brs=["Computer Science","Electronics & Communication","Mechanical","Electrical","Civil","Information Technology"];
+const sk=["HTML / CSS","JavaScript","React","Node.js","Python","Java","C / C++","PHP","WordPress","Shopify","Flutter","Android","iOS","UI / UX design","Figma","SQL","MongoDB","Firebase","Cloud / AWS","Git / GitHub","Billing / POS software","Excel automation","Data analysis","Machine learning / AI","Cybersecurity","SEO","Digital marketing","Arduino / Raspberry Pi","IoT","Embedded systems","PCB design","CCTV / networking","Electronics repair","AutoCAD","SolidWorks","3D printing","MATLAB"];
+function opts(a){return a.map(x=>`<option>${x}</option>`).join("")}
+function form(el,fields,dest){
+ el.innerHTML=fields.map(f=>{let c;
+  if(f[0]=="mob")c=`<div class="row"><input id="${el.id}mob" type="tel" inputmode="numeric" maxlength="10" placeholder="98XXXXXXXX"><button type="button" class="btn" data-t="sendO"></button></div><div class="row" id="${el.id}otp" hidden style="margin-top:8px"><input inputmode="numeric" maxlength="4" placeholder="1234" aria-label="OTP"><button type="button" class="btn" data-t="verO"></button></div><div class="hint" id="${el.id}msg" data-t="otpH" hidden></div>`;
+  else if(f[2]=="sel")c=`<select>${opts(f[3])}</select>`;
+  else if(f[2]=="chips")c=`<div class="chips">${sk.map(s=>`<button type="button" class="chip">${s}</button>`).join("")}</div>`;
+  else if(f[2]=="mode")c=`<div class="seg"><button type="button" class="on" data-t="online"></button><button type="button" data-t="offline"></button></div>`;
+  else c=`<input type="${f[2]||"text"}" ${f[2]=="url"?"":"required"}>`;
+  return `<div class="fld"><label data-t="${f[1]}"></label>${c}</div>`}).join("")+`<button class="btn" type="button" style="width:100%" data-t="create"></button>`;
+ const [snd,ver]=$$(`#${el.id} .row .btn`);
+ snd.onclick=()=>{$(`#${el.id}otp`).hidden=false;$(`#${el.id}msg`).hidden=false};
+ ver.onclick=()=>{if(ver.previousElementSibling.value.length==4){verified=true;const m=$(`#${el.id}msg`);m.dataset.t="okV";m.textContent=t("okV");m.style.color="var(--rust)"}};
+ $$(`#${el.id} .chip`).forEach(c=>c.onclick=()=>c.classList.toggle("on"));
+ $$(`#${el.id} .seg button`).forEach(b=>b.onclick=()=>{$$(`#${el.id} .seg button`).forEach(x=>x.classList.toggle("on",x==b))});
+ const go=el.lastChild,er=document.createElement("p");er.className="hint";er.style.cssText="color:var(--rust);margin:10px 0 0";el.append(er);
+ const demo=document.createElement("button");demo.type="button";demo.className="ghost";demo.style.cssText="width:100%;margin-top:10px";demo.dataset.t="demo";demo.textContent=t("demo");el.append(demo);demo.onclick=()=>show(dest);
+ go.onclick=()=>{const bad=[...el.querySelectorAll("input[required]")].find(i=>!i.value);
+  if(bad){er.textContent=t("fill");bad.focus();return}if(!verified){er.textContent=t("needV");return}show(dest)};
+}
+form($("#vForm"),[["n","name"],["mob","mob"],["m","mail","email"],["p","pass","password"],["b","biz"],["c","cat","sel",cats],["l","loc"]],"vDash");
+form($("#eForm"),[["n","name"],["mob","mob"],["m","mail","email"],["p","pass","password"],["c","col"],["b","brn","sel",brs],["s","skl","chips"],["x","exp","sel",exps],["g","pf","url"],["w","mode","mode"]],"eDash");
+$$("[data-go]").forEach(b=>b.onclick=()=>{role=b.dataset.go;show(role)});
+$("#sw").onclick=()=>{role=null;verified=false;show("gate")};
+$("#lang").onchange=e=>{lg=+e.target.value;apply();document.body.style.fontFamily=""};
+$$("#hm button").forEach(b=>b.onclick=()=>$$("#hm button").forEach(x=>x.classList.toggle("on",x==b)));
+const cp=$("#chatPanel"),cm=$("#cmsg"),cin=$("#cin"),hist=[];let busy=false,greeted=false;
+function add(c,x){const d=document.createElement("div");d.className="m "+c;d.textContent=x;cm.append(d);cm.scrollTop=cm.scrollHeight;return d}
+function openChat(){cp.hidden=false;if(!greeted){greeted=true;add("a",t("chatP"));const g=$("#csg");(role=="engineer"?["How do I get more projects?","How should I price my work?","How can I improve my profile?"]:["Which plan suits my shop?","Online or offline for me?","How does a maintenance plan work?"]).forEach(q=>{const b=document.createElement("button");b.type="button";b.className="chip";b.textContent=q;b.onclick=()=>ask(q);g.append(b)})}cin.focus()}
+async function ask(q){q=(q||"").trim();if(!q||busy)return;openChat();$("#csg").innerHTML="";add("u",q);cin.value="";busy=true;const b=add("a","…");
+ let s=null;try{s=await window.claude?.use("sample")}catch(e){}
+ if(!s){b.textContent=t("noai");busy=false;return}
+ const L=["English","Hindi (Devanagari)","Punjabi (Gurmukhi)","Haryanvi (colloquial, Devanagari)"][lg];
+ const sys="You are Vyom Assistant, inside Vyom, an Indian platform where local vendors (shopkeepers) hire skilled engineering students for websites, apps, billing software, CCTV, IoT and digital-store work. Hiring modes are Online and Offline only; never mention any other mode. Fixed prices: Online Basic Rs 499, Standard Rs 899, Premium Rs 1,999; Offline Basic Rs 999, Standard Rs 1,599, Premium Rs 1,999; customised quotes and maintenance plans (about Rs 299/month) are available. Help with any question: platform help, business or career advice, tech, or general topics. Be warm, practical and brief (under 120 words), plain text, no markdown. Do not invent platform policies beyond these facts. The user is a "+(role||"visitor")+". Reply in "+L+".";
+ const conv=hist.slice(-8).map(h=>h[0]+": "+h[1]).join("\n");
+ try{const r=await s(sys+"\n\n"+conv+"\nUser: "+q+"\nAssistant:",{cache:false,onText:({text})=>{b.textContent=text;cm.scrollTop=cm.scrollHeight}});b.textContent=r.text;hist.push(["User",q],["Assistant",r.text])}catch(e){b.textContent=t("noai")}
+ busy=false}
+$("#chatBtn").onclick=()=>cp.hidden?openChat():cp.hidden=true;
+$("#cclose").onclick=()=>cp.hidden=true;
+$("#cf").onsubmit=e=>{e.preventDefault();ask(cin.value)};
+$("#aiq").onkeydown=e=>{if(e.key=="Enter")$("#aia").textContent=t("aiA")};
+apply();
+</script></body></html>
